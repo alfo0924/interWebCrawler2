@@ -6,7 +6,8 @@
 
 ### 技術棧
 
-- **Spring Boot 2.7.x**: 核心框架
+- **Spring Boot 3.2.0**: 核心框架
+- **Java 17**: 編程語言
 - **Spring WebFlux**: 非阻塞 HTTP 請求
 - **Rome/RomeTools**: RSS 解析
 - **JSoup**: HTML 解析
@@ -24,25 +25,25 @@
 ### API 接口
 
 1. **獲取分類新聞**
-  - URL: `/api/news/category/{category}`
-  - Method: GET
-  - 參數: `category` - 新聞分類 (world, business, technology, science, health, entertainment, sports)
-  - 返回: 新聞列表
+    - URL: `/api/news/category/{category}`
+    - Method: GET
+    - 參數: `category` - 新聞分類 (world, business, technology, science, health, entertainment, sports)
+    - 返回: 新聞列表
 
 2. **搜索新聞**
-  - URL: `/api/news/search`
-  - Method: GET
-  - 參數: `query` - 搜索關鍵詞
-  - 返回: 新聞列表
+    - URL: `/api/news/search`
+    - Method: GET
+    - 參數: `query` - 搜索關鍵詞
+    - 返回: 新聞列表
 
 3. **獲取頭條新聞**
-  - URL: `/api/news/top-headlines`
-  - Method: GET
-  - 返回: 頭條新聞列表
+    - URL: `/api/news/top-headlines`
+    - Method: GET
+    - 返回: 頭條新聞列表
 
 ### 運行方式
 
-1. 確保已安裝 Java 11 或更高版本
+1. 確保已安裝 Java 17 或更高版本
 2. 克隆項目到本地
 3. 在項目根目錄執行: `./mvnw spring-boot:run`
 4. 服務將在 `http://localhost:8080` 啟動
