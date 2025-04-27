@@ -1,95 +1,63 @@
-# Google 國際新聞爬蟲系統 (SpringBoot )
+# interWebCrawler2
 
-## 項目結構
+## 國際新聞爬蟲系統 (後端)
 
-### 後端項目 (interWebCrawler2)
+這是一個使用 Spring Boot 開發的 Google News 國際新聞爬蟲系統後端。系統通過解析 Google News RSS Feed 獲取最新國際新聞，並提供 RESTful API 接口供前端調用。
 
-```
-interWebCrawler2/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── webcrawler/
-│   │   │           ├── InterWebCrawler2Application.java
-│   │   │           ├── config/
-│   │   │           │   ├── WebConfig.java
-│   │   │           │   └── RestTemplateConfig.java
-│   │   │           ├── controller/
-│   │   │           │   └── NewsController.java
-│   │   │           ├── service/
-│   │   │           │   ├── NewsService.java
-│   │   │           │   └── NewsServiceImpl.java
-│   │   │           ├── model/
-│   │   │           │   ├── NewsItem.java
-│   │   │           │   ├── NewsSource.java
-│   │   │           │   └── NewsResponse.java
-│   │   │           └── util/
-│   │   │               ├── RssParser.java
-│   │   │               └── HtmlParser.java
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       └── static/
-│   └── test/
-│       └── java/
-│           └── com/
-│               └── webcrawler/
-│                   └── InterWebCrawler2ApplicationTests.java
-├── pom.xml
-└── README.md
-```
+### 技術棧
 
-## 技術選型
+- **Spring Boot 2.7.x**: 核心框架
+- **Spring WebFlux**: 非阻塞 HTTP 請求
+- **Rome/RomeTools**: RSS 解析
+- **JSoup**: HTML 解析
+- **Lombok**: 減少樣板代碼
+- **Spring Cache (Caffeine)**: 緩存功能
 
-### 後端技術
+### 主要功能
 
-- **框架**: Spring Boot 2.7.x
-- **構建工具**: Maven
-- **Java 版本**: Java 11
-- **主要依賴**:
-    - spring-boot-starter-web: 提供 Web 相關功能
-    - spring-boot-starter-webflux: 用於非阻塞 HTTP 請求
-    - rome/rometools: 用於解析 RSS feed
-    - jsoup: 用於 HTML 解析
-    - lombok: 減少樣板代碼
-    - spring-boot-starter-cache: 提供緩存功能
-
-## 系統設計
-
-### 後端設計
-
-1. **Controller 層**: 提供 RESTful API 接口，接收前端請求
-2. **Service 層**: 實現業務邏輯，包括獲取和解析新聞數據
-3. **Model 層**: 定義數據模型
-4. **Util 層**: 提供工具類，如 RSS 解析器和 HTML 解析器
-
-
-
-### 數據流
-
-1. 用戶在前端選擇新聞分類或搜索關鍵詞
-2. 前端發送請求到後端 API
-3. 後端從 Google News 獲取數據
-4. 後端解析數據並返回給前端
-5. 前端渲染新聞卡片
-
-### 特色功能
-
-1. **分類瀏覽**: 支持多種新聞分類
+1. **分類新聞獲取**: 支持獲取不同分類的新聞 (國際、商業、科技、科學、健康、娛樂、體育)
 2. **關鍵詞搜索**: 支持搜索特定關鍵詞的新聞
-3. **響應式設計**: 適應不同屏幕尺寸
-4. **動態背景**: 橘色到黑色的漸變背景，每12秒變換一次
-5. **緩存機制**: 後端實現緩存，減少對 Google News 的請求
-6. **錯誤處理**: 完善的錯誤處理機制
-7. **跨域處理**: 後端處理跨域問題，無需前端代理
+3. **頭條新聞**: 獲取熱門頭條新聞
+4. **緩存機制**: 使用 Caffeine 實現高效緩存，減少對 Google News 的請求
+5. **圖片提取**: 自動從新聞文章中提取圖片
 
-## 實現細節
+### API 接口
 
-### 後端實現
+1. **獲取分類新聞**
+  - URL: `/api/news/category/{category}`
+  - Method: GET
+  - 參數: `category` - 新聞分類 (world, business, technology, science, health, entertainment, sports)
+  - 返回: 新聞列表
 
-1. **獲取新聞數據**: 使用 RestTemplate 或 WebClient 從 Google News RSS feed 獲取數據
-2. **解析 RSS**: 使用 Rome/RomeTools 解析 RSS feed
-3. **提取圖片**: 從新聞描述或鏈接中提取圖片 URL
-4. **緩存機制**: 使用 Spring Cache 緩存新聞數據，減少請求次數
-5. **跨域配置**: 配置 CORS 允許前端跨域請求
+2. **搜索新聞**
+  - URL: `/api/news/search`
+  - Method: GET
+  - 參數: `query` - 搜索關鍵詞
+  - 返回: 新聞列表
 
+3. **獲取頭條新聞**
+  - URL: `/api/news/top-headlines`
+  - Method: GET
+  - 返回: 頭條新聞列表
+
+### 運行方式
+
+1. 確保已安裝 Java 11 或更高版本
+2. 克隆項目到本地
+3. 在項目根目錄執行: `./mvnw spring-boot:run`
+4. 服務將在 `http://localhost:8080` 啟動
+
+### 配置說明
+
+可在 `application.properties` 中修改以下配置:
+
+- `server.port`: 服務端口
+- `news.default.language`: 默認語言
+- `news.default.country`: 默認國家
+- `news.cache.ttl`: 緩存過期時間 (秒)
+
+### 注意事項
+
+- 本項目僅用於學習和研究目的
+- 請遵守 Google 的服務條款和使用政策
+- 過於頻繁的請求可能會導致 IP 被臨時封鎖
